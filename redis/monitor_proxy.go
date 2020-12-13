@@ -51,7 +51,7 @@ func NewMonitorProxy(options ...MonitorProxyOption) *MonitorProxy {
 	}
 
 	if monitorProxy.tracer == nil {
-		monitorProxy.tracer = opentracing.NewTracer("redis", monitorProxy.logger)
+		monitorProxy.tracer = opentracing2.NoopTracer{}
 	}
 
 	monitorProxy.registerAfterEvent()

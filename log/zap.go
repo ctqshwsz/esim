@@ -94,7 +94,7 @@ func (ez *EsimZap) getArgs(ctx context.Context) []interface{} {
 	args = append(args, "caller", ez.getCaller(runtime.Caller(2)))
 	tracerID := tracerid.ExtractTracerID(ctx)
 	if tracerID != "" {
-		args = append(args, "tracer_id", tracerID)
+		args = append(args, "traceId", tracerID)
 	}
 
 	return args
@@ -107,7 +107,8 @@ func (ez *EsimZap) getGormArgs(ctx context.Context) []interface{} {
 
 	for i := 0; i < 15; i++ {
 		_, file, line, ok := runtime.Caller(i)
-		if ok && (strings.Index(file, "esim") == -1) {
+		if ok && (strings.Index(file, "_test.go") > -1 ||
+			(strings.Index(file, "esim") == -1 && strings.Index(file, "gorm") == -1)) {
 			fullPath = file + ":" + strconv.FormatInt(int64(line), 10)
 			break
 		}

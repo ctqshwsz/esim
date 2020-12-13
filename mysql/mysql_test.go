@@ -46,7 +46,9 @@ var db *sql.DB
 var logger log.Logger
 
 func TestMain(m *testing.M) {
-	logger = log.NewLogger()
+	logger = log.NewLogger(
+		log.WithDebug(true),
+	)
 
 	pool, err := dockertest.NewPool("")
 	if err != nil {
@@ -128,11 +130,7 @@ func TestInitAndSingleInstance(t *testing.T) {
 	client := NewClient(
 		clientOptions.WithDbConfig([]DbConfig{test1Config}),
 		clientOptions.WithGormConfig(&gorm.Config{
-			Logger: log.NewGormLogger(
-				log.WithGLogEsimZap(log.NewEsimZap(
-					log.WithEsimZapDebug(true),
-				)),
-			),
+			Logger: logger.(*log.Elogger).Glog(),
 		}),
 	)
 	ctx := context.Background()
@@ -160,11 +158,7 @@ func TestProxyPatternWithTwoInstance(t *testing.T) {
 		clientOptions.WithDbConfig([]DbConfig{test1Config, test2Config}),
 		clientOptions.WithConf(memConfig),
 		clientOptions.WithGormConfig(&gorm.Config{
-			Logger: log.NewGormLogger(
-				log.WithGLogEsimZap(log.NewEsimZap(
-					log.WithEsimZapDebug(true),
-				)),
-			),
+			Logger: logger.(*log.Elogger).Glog(),
 		}),
 		clientOptions.WithProxy(func() interface{} {
 			return NewMonitorProxy(
@@ -210,11 +204,7 @@ func TestMulProxyPatternWithOneInstance(t *testing.T) {
 		clientOptions.WithDbConfig([]DbConfig{test1Config}),
 		clientOptions.WithConf(memConfig),
 		clientOptions.WithGormConfig(&gorm.Config{
-			Logger: log.NewGormLogger(
-				log.WithGLogEsimZap(log.NewEsimZap(
-					log.WithEsimZapDebug(true),
-				)),
-			),
+			Logger: logger.(*log.Elogger).Glog(),
 		}),
 		clientOptions.WithProxy(
 			func() interface{} {
@@ -262,11 +252,7 @@ func TestMulProxyPatternWithTwoInstance(t *testing.T) {
 		clientOptions.WithDbConfig([]DbConfig{test1Config, test2Config}),
 		clientOptions.WithConf(memConfig),
 		clientOptions.WithGormConfig(&gorm.Config{
-			Logger: log.NewGormLogger(
-				log.WithGLogEsimZap(log.NewEsimZap(
-					log.WithEsimZapDebug(true),
-				)),
-			),
+			Logger: logger.(*log.Elogger).Glog(),
 		}),
 		clientOptions.WithProxy(
 			func() interface{} {
@@ -320,11 +306,7 @@ func BenchmarkParallelGetDB(b *testing.B) {
 		clientOptions.WithDbConfig([]DbConfig{test1Config, test2Config}),
 		clientOptions.WithConf(memConfig),
 		clientOptions.WithGormConfig(&gorm.Config{
-			Logger: log.NewGormLogger(
-				log.WithGLogEsimZap(log.NewEsimZap(
-					log.WithEsimZapDebug(true),
-				)),
-			),
+			Logger: logger.(*log.Elogger).Glog(),
 		}),
 		clientOptions.WithProxy(func() interface{} {
 			spyProxy := newSpyProxy(log.NewLogger(), "spyProxy")
@@ -360,11 +342,7 @@ func TestDummyProxy_Exec(t *testing.T) {
 		clientOptions.WithDbConfig([]DbConfig{test1Config}),
 		clientOptions.WithConf(memConfig),
 		clientOptions.WithGormConfig(&gorm.Config{
-			Logger: log.NewGormLogger(
-				log.WithGLogEsimZap(log.NewEsimZap(
-					log.WithEsimZapDebug(true),
-				)),
-			),
+			Logger: logger.(*log.Elogger).Glog(),
 		}),
 		clientOptions.WithProxy(
 			func() interface{} {
@@ -392,11 +370,7 @@ func TestClient_GetStats(t *testing.T) {
 		clientOptions.WithDbConfig([]DbConfig{test1Config, test2Config}),
 		clientOptions.WithStateTicker(10*time.Millisecond),
 		clientOptions.WithGormConfig(&gorm.Config{
-			Logger: log.NewGormLogger(
-				log.WithGLogEsimZap(log.NewEsimZap(
-					log.WithEsimZapDebug(true),
-				)),
-			),
+			Logger: logger.(*log.Elogger).Glog(),
 		}),
 		clientOptions.WithProxy(func() interface{} {
 			memConfig := config.NewMemConfig()
@@ -439,11 +413,7 @@ func TestClient_TxCommit(t *testing.T) {
 	client := NewClient(
 		clientOptions.WithDbConfig([]DbConfig{test1Config, test2Config}),
 		clientOptions.WithGormConfig(&gorm.Config{
-			Logger: log.NewGormLogger(
-				log.WithGLogEsimZap(log.NewEsimZap(
-					log.WithEsimZapDebug(true),
-				)),
-			),
+			Logger: logger.(*log.Elogger).Glog(),
 		}),
 		clientOptions.WithProxy(func() interface{} {
 			memConfig := config.NewMemConfig()
@@ -480,11 +450,7 @@ func TestClient_TxRollBack(t *testing.T) {
 	client := NewClient(
 		clientOptions.WithDbConfig([]DbConfig{test1Config, test2Config}),
 		clientOptions.WithGormConfig(&gorm.Config{
-			Logger: log.NewGormLogger(
-				log.WithGLogEsimZap(log.NewEsimZap(
-					log.WithEsimZapDebug(true),
-				)),
-			),
+			Logger: logger.(*log.Elogger).Glog(),
 		}),
 		clientOptions.WithProxy(func() interface{} {
 			memConfig := config.NewMemConfig()

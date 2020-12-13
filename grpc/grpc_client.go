@@ -8,7 +8,6 @@ import (
 	"github.com/grpc-ecosystem/grpc-opentracing/go/otgrpc"
 	"github.com/jukylin/esim/config"
 	"github.com/jukylin/esim/log"
-	"github.com/jukylin/esim/opentracing"
 	opentracing2 "github.com/opentracing/opentracing-go"
 	"github.com/prometheus/client_golang/prometheus"
 	"golang.org/x/net/context"
@@ -73,7 +72,7 @@ func NewClientOptions(options ...ClientOptional) *ClientOptions {
 	}
 
 	if clientOptions.tracer == nil {
-		clientOptions.tracer = opentracing.NewTracer("grpc_client", clientOptions.logger)
+		clientOptions.tracer = opentracing2.NoopTracer{}
 	}
 
 	if clientOptions.clientMetrics == nil {

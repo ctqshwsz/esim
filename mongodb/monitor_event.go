@@ -46,7 +46,7 @@ func NewMonitorEvent(options ...EventOption) MgoEvent {
 	}
 
 	if m.tracer == nil {
-		m.tracer = opentracing.NewTracer("mongodb", m.logger)
+		m.tracer = opentracing2.NoopTracer{}
 	}
 
 	m.registerAfterEvent()

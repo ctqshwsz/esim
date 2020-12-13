@@ -18,7 +18,7 @@ func Test_esimZap_getGormArgs(t *testing.T) {
 		args args
 		want []interface{}
 	}{
-		{"解析路径", args{ctx}, []interface{}{"caller", "testing/testing.go:991"}},
+		{"解析路径", args{ctx}, []interface{}{"caller", "log/zap_test.go:26"}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

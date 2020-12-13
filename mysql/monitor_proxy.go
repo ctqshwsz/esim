@@ -49,7 +49,7 @@ func NewMonitorProxy(options ...MonitorProxyOption) *MonitorProxy {
 	}
 
 	if MonitorProxy.tracer == nil {
-		MonitorProxy.tracer = opentracing.NewTracer("mysql", MonitorProxy.logger)
+		MonitorProxy.tracer = opentracing2.NoopTracer{}
 	}
 
 	MonitorProxy.name = "monitor_proxy"
